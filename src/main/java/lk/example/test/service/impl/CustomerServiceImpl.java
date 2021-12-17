@@ -2,6 +2,7 @@ package lk.example.test.service.impl;
 
 import lk.example.test.dto.CustomerDTO;
 import lk.example.test.entity.Customer;
+import lk.example.test.exception.ValidateException;
 import lk.example.test.repo.CustomerRepo;
 import lk.example.test.service.CustomerService;
 import org.modelmapper.ModelMapper;
@@ -31,16 +32,25 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void saveCustomer(CustomerDTO dto) {
+        if (repo.existsById(dto.getId())) {
+            throw new ValidateException("Customer Already Exist");
+        }
         repo.save(mapper.map(dto, Customer.class));
     }
 
     @Override
     public void updateCustomer(CustomerDTO dto) {
-        repo.save(mapper.map(dto, Customer.class));
+        if (repo.existsById(dto.getId())) {
+            repo.save(mapper.map(dto, Customer.class));
+        }
+        
     }
 
     @Override
     public void deleteCustomer(String id) {
+        if (!repo.existsById(id)) {
+            throw new ValidateException("No Customer for Delete!!");
+        }
         repo.deleteById(id);
     }
 

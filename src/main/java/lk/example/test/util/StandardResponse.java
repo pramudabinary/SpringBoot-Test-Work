@@ -8,8 +8,11 @@ import lombok.NoArgsConstructor;
  * @author Pramuda Liyanage <pramudatharika@gmail.com>
  * @since 12/17/21
  **/
-//@Data
-//@AllArgsConstructor
-//@NoArgsConstructor
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class StandardResponse {
+    private String code;
+    private String message;
+    private Object data;
 }
