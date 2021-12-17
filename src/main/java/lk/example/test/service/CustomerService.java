@@ -17,6 +17,6 @@ public interface CustomerService {
 
     CustomerDTO searchCustomer(String id);
 
-    ArrayList<CustomerDTO> getAllCustomers(String id);
+    ArrayList<CustomerDTO> getAllCustomers();
 
 }
