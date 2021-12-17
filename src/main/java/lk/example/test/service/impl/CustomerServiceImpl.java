@@ -43,7 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (repo.existsById(dto.getId())) {
             repo.save(mapper.map(dto, Customer.class));
         }
-        
+
     }
 
     @Override
@@ -69,4 +69,5 @@ public class CustomerServiceImpl implements CustomerService {
         return mapper.map(all, new TypeToken<ArrayList<CustomerDTO>>() {
         }.getType());
     }
+
 }

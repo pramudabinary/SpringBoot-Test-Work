@@ -3,6 +3,7 @@ package lk.example.test.service;
 import lk.example.test.dto.CustomerDTO;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Pramuda Liyanage <pramudatharika@gmail.com>

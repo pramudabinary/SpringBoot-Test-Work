@@ -2,6 +2,7 @@ package lk.example.test.controller;
 
 import lk.example.test.dto.CustomerDTO;
 import lk.example.test.exception.NotFoundException;
+import lk.example.test.poi.CustomerExcelExporter;
 import lk.example.test.service.CustomerService;
 import lk.example.test.util.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * @author Pramuda Liyanage <pramudatharika@gmail.com>
@@ -62,6 +68,23 @@ public class CustomerFormController {
     public ResponseEntity getAllCustomers() {
         ArrayList<CustomerDTO> allCustomers = service.getAllCustomers();
         return new ResponseEntity(new StandardResponse("200", "Done", allCustomers), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        ArrayList<CustomerDTO> listUsers = service.getAllCustomers();
+
+        CustomerExcelExporter excelExporter = new CustomerExcelExporter(listUsers);
+
+        excelExporter.export(response);
     }
 
 
