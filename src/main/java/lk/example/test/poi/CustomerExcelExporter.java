@@ -30,17 +30,17 @@ public class CustomerExcelExporter {
     }
 
     private void writeHeaderLine() {
-        sheet = workbook.createSheet("Customers");
+        sheet = workbook.createSheet("customers");
 
         Row row = sheet.createRow(0);
 
         CellStyle style = workbook.createCellStyle();
         XSSFFont font = workbook.createFont();
         font.setBold(true);
-        font.setFontHeight(16);
+        font.setFontHeight(10);
         style.setFont(font);
 
-        createCell(row, 0, "ID", style);
+        createCell(row, 0, "id", style);
         createCell(row, 1, "name", style);
         createCell(row, 2, "address", style);
         createCell(row, 3, "contact", style);
@@ -66,7 +66,7 @@ public class CustomerExcelExporter {
 
         CellStyle style = workbook.createCellStyle();
         XSSFFont font = workbook.createFont();
-        font.setFontHeight(14);
+        font.setFontHeight(10);
         style.setFont(font);
 
         for (CustomerDTO dto : listUsers) {

@@ -64,12 +64,6 @@ public class CustomerFormController {
         return new ResponseEntity(new StandardResponse("200", "Done", customer), HttpStatus.OK);
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getAllCustomers() {
-        ArrayList<CustomerDTO> allCustomers = service.getAllCustomers();
-        return new ResponseEntity(new StandardResponse("200", "Done", allCustomers), HttpStatus.OK);
-    }
-
     @GetMapping(path = "/excel")
     public void exportToExcel(HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");
@@ -77,7 +71,7 @@ public class CustomerFormController {
         String currentDateTime = dateFormatter.format(new Date());
 
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=users_" + currentDateTime + ".xlsx";
+        String headerValue = "attachment; filename=customers_" + currentDateTime + ".xlsx";
         response.setHeader(headerKey, headerValue);
 
         ArrayList<CustomerDTO> listUsers = service.getAllCustomers();
