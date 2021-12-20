@@ -4,12 +4,13 @@ import lk.example.test.dto.CustomerDTO;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xddf.usermodel.chart.*;
+import org.apache.poi.xssf.usermodel.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -46,6 +47,33 @@ public class CustomerExcelExporter {
         createCell(row, 3, "contact", style);
         createCell(row, 4, "salary", style);
 
+        pieChartCreate();
+
+    }
+
+    private void pieChartCreate(){
+        XSSFDrawing drawing = sheet.createDrawingPatriarch();
+        XSSFClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 0, 4, 7, 20);
+
+        XSSFChart chart = drawing.createChart(anchor);
+        chart.setTitleText("Customers of TestProject");
+        chart.setTitleOverlay(false);
+
+        XDDFChartLegend legend = chart.getOrAddLegend();
+        legend.setPosition(LegendPosition.LEFT);
+
+        XDDFDataSource<String> customers = XDDFDataSourcesFactory.fromStringCellRange(sheet,
+                new CellRangeAddress(0, 0, 0, 6));
+
+        XDDFNumericalDataSource<Double> values = XDDFDataSourcesFactory.fromNumericCellRange(sheet,
+                new CellRangeAddress(1, 1, 0, 6));
+
+        XDDFChartData data = chart.createData(ChartTypes.PIE3D, null, null);
+
+        data.setVaryColors(true);
+        data.addSeries(customers,values);
+        chart.plot(data);
+
     }
 
     private void createCell(Row row, int columnCount, Object value, CellStyle style) {
@@ -80,6 +108,7 @@ public class CustomerExcelExporter {
             createCell(row, columnCount++, dto.getSalary(), style);
 
         }
+
     }
 
     public void export(HttpServletResponse response) throws IOException {
